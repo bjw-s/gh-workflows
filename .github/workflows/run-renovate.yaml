@@ -52,6 +52,8 @@ jobs:
           RENOVATE_AUTODISCOVER: true
           RENOVATE_AUTODISCOVER_FILTER: "${{ github.repository }}"
           RENOVATE_PLATFORM: "github"
+          RENOVATE_USERNAME: "repo-duster[bot]"
+          RENOVATE_GIT_AUTHOR: "repo-duster <87358111+repo-duster[bot]@users.noreply.github.com>"
           RENOVATE_PLATFORM_COMMIT: "true"
         with:
           configurationFile: ${{ inputs.configurationFile }}
