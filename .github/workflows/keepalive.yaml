@@ -1,0 +1,39 @@
+---
+name: Keepalive
+
+on:
+  workflow_call:
+    secrets:
+      app_id:
+        description: "App ID of the application used to generate a token"
+        required: true
+      app_private_key:
+        description: "Private key of the application used to generate a token"
+        required: true
+
+jobs:
+  keepalive:
+    name: Keep scheduled GitHub workflows alive
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: "Generate GitHub App Token"
+        uses: actions/create-github-app-token@v1.9.0
+        id: app-token
+        with:
+          app-id: "${{ secrets.app_id }}"
+          private-key: "${{ secrets.app_private_key }}"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: "${{ steps.app-token.outputs.token }}"
+
+      - name: Keep scheduled GitHub workflows alive
+        uses: gautamkrishnar/keepalive-workflow@v2
+        with:
+          use_api: true
+          gh_token: ${{ steps.app-token.outputs.token }}
+          committer_username: repo-duster[bot]
+          committer_email: repo-duster <87358111+repo-duster[bot]@users.noreply.github.com>
